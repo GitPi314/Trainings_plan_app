@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart' as path_provider;
 import 'models/workout.dart';
 import 'models/exercise.dart';
 import 'models/set.dart';
-import 'screens/home_screen.dart';
+import 'screens/main_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -112,8 +112,9 @@ class _MyAppState extends State<MyApp> {
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: Colors.blue,
         ),
-        scaffoldBackgroundColor: Colors.black,
-        cardColor: const Color(0XFF25232A),
+        scaffoldBackgroundColor: Color(0XFF303D44),
+        //scaffoldBackgroundColor: Color(0XFF60727B),
+        cardColor: const Color(0XFF1C2428),
         textTheme: const TextTheme(
           bodyLarge: TextStyle(color: Colors.white70),
           bodyMedium: TextStyle(color: Colors.white54, fontSize: 17),

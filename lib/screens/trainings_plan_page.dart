@@ -172,10 +172,19 @@ class _TrainingPlanPageState extends State<TrainingPlanPage> {
           GestureDetector(
             onTap: _navigateToCalendarPage, // Navigiere zur Kalenderseite
             child: Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                color: Colors.blue,
+              color: Color(0XFF075584),
+              /*
+              decoration: BoxDecoration(
+                //borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                gradient: LinearGradient(
+                  colors: [Colors.blue, Colors.blueAccent, Colors.pink.shade400],
+                  stops: [0.0, 0.5, 1.0],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
               ),
+
+               */
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,9 +196,12 @@ class _TrainingPlanPageState extends State<TrainingPlanPage> {
                   ),
                   const SizedBox(height: 10),
                   LinearProgressIndicator(
+                    borderRadius: BorderRadius.all(Radius.circular(50)),
+                    minHeight: 8,
                     value: completedWorkouts / totalWorkouts,
                     backgroundColor: Colors.white54,
-                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.green),
+                    //valueColor: AlwaysStoppedAnimation<Color>(Colors.green.shade600),
+                    valueColor: const AlwaysStoppedAnimation<Color>(Color(0XFF43A047)),
                   ),
                 ],
               ),
@@ -255,14 +267,33 @@ class _TrainingPlanPageState extends State<TrainingPlanPage> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _addWorkout,
-        label: const Text('Add Workout'),
-        icon: const Icon(Icons.add),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50),
+      floatingActionButton: Container(
+
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(50)),
+          gradient: LinearGradient(
+            colors: [Colors.blue, Colors.blueAccent, Colors.pink],
+            stops: [0.0, 0.5, 1.0],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: MaterialButton(
+          onPressed: _addWorkout,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50),
+          ),
+          child: const Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.add, color: Colors.white),
+              SizedBox(width: 8),
+              Text('Add Workout', style: TextStyle(color: Colors.white)),
+            ],
+          ),
         ),
       ),
+
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

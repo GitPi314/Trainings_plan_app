@@ -1,4 +1,4 @@
-import 'package:Fitness/screens/home_screen.dart';
+import 'package:Fitness/screens/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:fluttertoast/fluttertoast.dart';

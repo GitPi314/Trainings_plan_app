@@ -31,6 +31,7 @@ class HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color(0XFF303D44),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.fitness_center),
