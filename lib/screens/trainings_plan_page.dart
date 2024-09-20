@@ -169,11 +169,11 @@ class _TrainingPlanPageState extends State<TrainingPlanPage> {
     return Scaffold(
       body: Column(
         children: [
-          GestureDetector(
-            onTap: _navigateToCalendarPage, // Navigiere zur Kalenderseite
-            child: Container(
-              color: Color(0XFF075584),
-              /*
+
+          Container(
+            color: const Color(0XFF075584),
+            padding: const EdgeInsets.all(16.0),
+            /*
               decoration: BoxDecoration(
                 //borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
                 gradient: LinearGradient(
@@ -185,28 +185,72 @@ class _TrainingPlanPageState extends State<TrainingPlanPage> {
               ),
 
                */
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 6),
-                  Text(
-                    'Workouts Completed: $completedWorkouts / $totalWorkouts',
-                    style: const TextStyle(color: Colors.white, fontSize: 21),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Linke Seite: "Workouts Completed" Box (2/3 der Breite)
+                Expanded(
+                  flex: 4,
+                  child: GestureDetector(
+                    onTap: _navigateToCalendarPage,
+                    child: Container(
+                      padding: const EdgeInsets.only(left: 0.0, top: 16.0, bottom: 16.0, right: 8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min, // Minimiert die Höhe auf das Notwendige
+                        children: [
+                          Text(
+                            'Workouts Completed: $completedWorkouts / $totalWorkouts',
+                            style: const TextStyle(color: Colors.white, fontSize: 21),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                          const SizedBox(height: 10),
+                          LinearProgressIndicator(
+                            borderRadius: const BorderRadius.all(Radius.circular(50)),
+                            minHeight: 8,
+                            value: completedWorkouts / totalWorkouts,
+                            backgroundColor: Colors.white54,
+                            //valueColor: AlwaysStoppedAnimation<Color>(Colors.green.shade600),
+                            valueColor: const AlwaysStoppedAnimation<Color>(Color(0XFF43A047)),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  const SizedBox(height: 10),
-                  LinearProgressIndicator(
-                    borderRadius: BorderRadius.all(Radius.circular(50)),
-                    minHeight: 8,
-                    value: completedWorkouts / totalWorkouts,
-                    backgroundColor: Colors.white54,
-                    //valueColor: AlwaysStoppedAnimation<Color>(Colors.green.shade600),
-                    valueColor: const AlwaysStoppedAnimation<Color>(Color(0XFF43A047)),
+                ),
+                // Rechte Seite: Plus-Icon (1/3 der Breite)
+                Expanded(
+                  flex: -2,
+                  child: GestureDetector(
+                    onTap: _addWorkout,
+                    child: Container(
+                      padding: const EdgeInsets.only(right: 6.0, top: 16.0, bottom: 16.0, left: 8.0),
+                      child: Center(
+                        child: ShaderMask(
+                          shaderCallback: (Rect bounds) {
+                            return const LinearGradient(
+                              colors: [Colors.blue, Colors.green],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ).createShader(bounds);
+                          },
+                          blendMode: BlendMode.srcIn,
+                          child: const Icon(
+                            Icons.add_circle_outline,
+                            color: Colors.white, // Die Farbe wird durch den Shader überschrieben
+                            size: 40,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
+          // ... Restlicher Code
+
           Expanded(
             child: ValueListenableBuilder(
               valueListenable: workoutBox.listenable(),
@@ -267,6 +311,7 @@ class _TrainingPlanPageState extends State<TrainingPlanPage> {
           ),
         ],
       ),
+      /*
       floatingActionButton: Container(
 
         decoration: const BoxDecoration(
@@ -293,8 +338,9 @@ class _TrainingPlanPageState extends State<TrainingPlanPage> {
           ),
         ),
       ),
+      */
 
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      //floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
