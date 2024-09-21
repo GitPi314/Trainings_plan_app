@@ -377,6 +377,18 @@ class _WorkoutBoxState extends State<WorkoutBox> {
     });
   }
 
+  void _removeMuscleGroup(String muscleGroup) {
+    setState(() {
+      // Entferne die Muskelgruppe aus der Liste
+      _muscleGroups.remove(muscleGroup);
+
+      // Aktualisiere das Workout-Objekt und speichere es in Hive
+      widget.workout.muscleGroups = _muscleGroups;
+      widget.workout.save();
+    });
+  }
+
+
   String _formatDate(int timestamp) {
     final DateTime date = DateTime.fromMillisecondsSinceEpoch(timestamp);
     return DateFormat('dd.MM.yyyy HH:mm').format(date);
@@ -429,7 +441,7 @@ class _WorkoutBoxState extends State<WorkoutBox> {
                       Text(
                         widget.workout.title,
                         style: const TextStyle(
-                          fontSize: 24,
+                          fontSize: 28,
                           fontWeight: FontWeight.bold,
                           color: Colors.blue,
                         ),
@@ -445,6 +457,7 @@ class _WorkoutBoxState extends State<WorkoutBox> {
                     onPressed: _saveWorkout,
                   )
                       : PopupMenuButton(
+                    color: Color(0XFF1C2428),
                     onSelected: (value) {
                       if (value == 'edit') {
                         setState(() {
@@ -479,25 +492,54 @@ class _WorkoutBoxState extends State<WorkoutBox> {
                   ),
                 ],
               ),
-              const SizedBox(height: 5),
-              isEditing
-                  ? TextFormField(
-                initialValue: _muscleGroups.join(', '),
-                decoration: InputDecoration(
-                  labelText: 'Muscle Groups (comma separated)',
-                  border: const OutlineInputBorder(),
-                  filled: true,
-                  fillColor: Theme.of(context).scaffoldBackgroundColor,
+              const SizedBox(height: 14),
+              SizedBox(
+                height: 35,  // Höhe der Tags angepasst
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: widget.workout.muscleGroups.map((muscleGroup) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 14.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Color(0XFF1C2428),  // Hintergrundfarbe des Tags
+                          borderRadius: BorderRadius.circular(30),  // Abgerundete Ecken
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,  // Minimale Breite, passend zum Inhalt
+                          children: [
+                            ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                bottomLeft: Radius.circular(30),
+                              ),  // Runden nur für die linke Seite (wo das Bild ist)
+                              child: Image.asset(
+                                'lib/assets/images/$muscleGroup.png',
+                                height: 50,  // Höhe des Bildes gleich der Höhe des gesamten Tags
+                                width: 50,   // Breite des Bildes
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10),  // Abstand zum Text
+                              child: Text(
+                                muscleGroup,
+                                style: TextStyle(fontSize: 16, color: Colors.grey[300]),
+                              ),
+                            ),
+                            if (isEditing)
+                              IconButton(
+                                icon: const Icon(Icons.close, color: Colors.red),
+                                onPressed: () => _removeMuscleGroup(muscleGroup),  // Entferne Muskelgruppe
+                              ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }).toList(),
                 ),
-                onChanged: (value) {
-                  _muscleGroups = value.split(',').map((e) => e.trim()).toList();
-                },
-              )
-                  : Text(
-                widget.workout.muscleGroups.join(', '),
-                style: const TextStyle(fontSize: 20, color: Colors.white, decoration: TextDecoration.underline),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
               Text(
                 'Avg. Duration: ${(widget.workout.averageDuration / 60).toStringAsFixed(2)} min',
                 style: Theme.of(context).textTheme.bodyMedium,
